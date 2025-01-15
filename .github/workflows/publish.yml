@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'packages/react-scripts/**'
+      - '.github/workflows/publish.yml'
 
 jobs:
   build:
