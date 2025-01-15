@@ -17,6 +17,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGE_TOKEN }}" > ~/.npmrc
 
       - name: Cache node modules
         uses: actions/cache@v4
@@ -31,7 +35,9 @@ jobs:
           cd packages/react-scripts
           npm install
 
-      - name: Publish to GitHub Package Registry
+      - name: Publish to NPM Package Registry
         run: |
           cd packages/react-scripts
           npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_TOKEN }}
