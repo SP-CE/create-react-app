@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - "packages/react-scripts/**"
+      - 'packages/react-scripts/**'
 
 jobs:
   build:
@@ -16,11 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "22"
-          registry-url: "https://npm.pkg.github.com"
-
-      - name: Configure .npmrc
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_NPM_PACKAGE_TOKEN }}" > ~/.npmrc
+          node-version: '22'
 
       - name: Cache node modules
         uses: actions/cache@v4
@@ -38,6 +34,4 @@ jobs:
       - name: Publish to GitHub Package Registry
         run: |
           cd packages/react-scripts
-          npm publish --access=restricted
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_NPM_PACKAGE_TOKEN }}
+          npm publish
