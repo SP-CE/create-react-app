@@ -1,4 +1,4 @@
-name: SPCE react-scripts
+name: Publish
 on:
   push:
     branches:
