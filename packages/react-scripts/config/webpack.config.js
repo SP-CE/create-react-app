@@ -24,6 +24,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
@@ -301,6 +302,10 @@ module.exports = function (webpackEnv) {
         // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
+      splitChunks: {
+        chunks: 'all', // Splits code into smaller chunks
+      },
+      usedExports: true, // Enable tree shaking by marking used exports
     },
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
@@ -669,6 +674,14 @@ module.exports = function (webpackEnv) {
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
         }),
+      isEnvProduction &&
+        new CompressionPlugin({
+          filename: '[path][base].gz', // Output file name for gzipped files
+          algorithm: 'gzip',
+          test: /\.(js|css|html|svg)$/, // Files to compress
+          threshold: 10240, // Only compress files larger than 10KB
+          minRatio: 0.8, // Only compress files if the compression ratio is above 0.8
+        }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
       //   output file so that tools can pick it up without having to parse
@@ -791,6 +804,10 @@ module.exports = function (webpackEnv) {
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
-    performance: false,
+    performance: {
+      hints: false, // Warns if asset size exceeds limit
+      maxEntrypointSize: 100000, // Maximum entry point size in bytes
+      maxAssetSize: 100000, // Maximum asset size in bytes
+    },
   };
 };

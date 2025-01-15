@@ -1,0 +1,43 @@
+name: SPCE react-scripts
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/react-scripts/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Configure .npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_NPM_PACKAGE_TOKEN }}" > ~/.npmrc
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: packages/react-scripts/node_modules
+          key: spce-react-scripts-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: |
+          cd packages/react-scripts
+          npm install
+
+      - name: Publish to GitHub Package Registry
+        run: |
+          cd packages/react-scripts
+          npm publish --access=restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_NPM_PACKAGE_TOKEN }}
