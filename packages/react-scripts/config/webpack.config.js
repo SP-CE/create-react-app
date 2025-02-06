@@ -302,7 +302,21 @@ module.exports = function (webpackEnv) {
         // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
+      runtimeChunk: true,
+      mergeDuplicateChunks: true,
       splitChunks: {
+        cacheGroups: {
+          commons: {
+            test: /[\\/](commons)[\\/]/,
+            name: 'commons',
+            enforce: true,
+          },
+          components: {
+            test: /[\\/](components)[\\/]/,
+            name: 'commons',
+            enforce: true,
+          },
+        },
         chunks: 'all', // Splits code into smaller chunks
       },
       usedExports: true, // Enable tree shaking by marking used exports
@@ -673,6 +687,7 @@ module.exports = function (webpackEnv) {
           // both options are optional
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+          ignoreOrder: true,
         }),
       isEnvProduction &&
         new CompressionPlugin({
