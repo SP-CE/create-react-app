@@ -318,6 +318,12 @@ module.exports = function (webpackEnv) {
         //   },
         // },
         chunks: 'all', // Splits code into smaller chunks
+        cacheGroups: {
+          default: {
+            minChunks: 1000,
+            reuseExistingChunk: true,
+          },
+        },
       },
       usedExports: true, // Enable tree shaking by marking used exports
     },
