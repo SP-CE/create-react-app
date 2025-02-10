@@ -308,9 +308,9 @@ module.exports = function (webpackEnv) {
         maxSize: 50000000, // Max size of a split chunk
         usedExports: true, // Tree shaking
         cacheGroups: {
-          materialui: {
+          mui_libs: {
             test: /\/node_modules\/@mui\/(base|material|system|icons-material|x-tree-view|x-internals|utils)/,
-            name: 'materialui',
+            name: 'mui_libs',
             chunks: 'all',
             reuseExistingChunk: true,
           },
@@ -320,19 +320,19 @@ module.exports = function (webpackEnv) {
             chunks: 'all',
             reuseExistingChunk: true,
           },
-          react: {
-            test: /\/node_modules\/(react|react-dom|i18next|webfontloader|device-uuid|lodash)\//,
-            name: 'react',
+          shared_libs: {
+            test: /\/node_modules\/(react|react-dom|i18next|webfontloader|device-uuid|lodash|dompurify)\//,
+            name: 'shared_libs',
             chunks: 'all',
             reuseExistingChunk: true,
           },
-          // cms_commons: {
-          //   test: /\/node_modules[^]*\/(react-player|react-slick|cropper|react-cropper|react-dnd|dompurify|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
-          //   name: 'cms_commons',
-          //   chunks: 'all',
-          //   reuseExistingChunk: true,
-          //   priority: -10,
-          // },
+          cms_libs: {
+            test: /\/node_modules[^]*\/(react-slick|cropper|react-cropper|react-dnd|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
+            name: 'cms_libs',
+            chunks: 'all',
+            reuseExistingChunk: true,
+            priority: -10,
+          },
           // vaam: {
           //   test: /\/src\/(vaam)\//,
           //   name: 'vaam',
