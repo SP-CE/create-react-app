@@ -333,13 +333,13 @@ module.exports = function (webpackEnv) {
             reuseExistingChunk: true,
             priority: -10,
           },
-          vaam: {
-            test: /\/src\/(vaam)\//,
-            name: 'vaam',
-            chunks: 'all',
-            reuseExistingChunk: true,
-            priority: -10,
-          },
+          // vaam: {
+          //   test: /\/src\/(vaam)\//,
+          //   name: 'vaam',
+          //   chunks: 'all',
+          //   reuseExistingChunk: true,
+          //   priority: -10,
+          // },
           default: {
             minChunks: 100,
             reuseExistingChunk: true,
