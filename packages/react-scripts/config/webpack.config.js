@@ -302,25 +302,46 @@ module.exports = function (webpackEnv) {
         // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
-      runtimeChunk: true,
       mergeDuplicateChunks: true,
       splitChunks: {
-        // cacheGroups: {
-        //   commons: {
-        //     test: /[\\/](commons)[\\/]/,
-        //     name: 'commons',
-        //     enforce: true,
-        //   },
-        //   components: {
-        //     test: /[\\/](components)[\\/]/,
-        //     name: 'commons',
-        //     enforce: true,
-        //   },
-        // },
         chunks: 'all', // Splits code into smaller chunks
+        maxSize: 50000000, // Max size of a split chunk
+        usedExports: true, // Tree shaking
         cacheGroups: {
+          materialui: {
+            test: /\/node_modules\/@mui\/(base|material|system|icons-material|x-tree-view|x-internals|utils)/,
+            name: 'materialui',
+            chunks: 'all',
+            reuseExistingChunk: true,
+          },
+          vaam_libs: {
+            test: /\/node_modules\/(vaam|@vaam|video)/,
+            name: 'vaam_libs',
+            chunks: 'all',
+            reuseExistingChunk: true,
+          },
+          react: {
+            test: /\/node_modules\/(react|react-dom|i18next|webfontloader|device-uuid|lodash)\//,
+            name: 'react',
+            chunks: 'all',
+            reuseExistingChunk: true,
+          },
+          cms_commons: {
+            test: /\/node_modules[^]*\/(react-player|react-slick|cropper|react-cropper|react-dnd|dompurify|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
+            name: 'cms_commons',
+            chunks: 'all',
+            reuseExistingChunk: true,
+            priority: -10,
+          },
+          vaam: {
+            test: /\/src\/(vaam)\//,
+            name: 'vaam',
+            chunks: 'all',
+            reuseExistingChunk: true,
+            priority: -10,
+          },
           default: {
-            minChunks: 1000,
+            minChunks: 100,
             reuseExistingChunk: true,
           },
         },
