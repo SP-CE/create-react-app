@@ -326,13 +326,13 @@ module.exports = function (webpackEnv) {
             chunks: 'all',
             reuseExistingChunk: true,
           },
-          cms_commons: {
-            test: /\/node_modules[^]*\/(react-player|react-slick|cropper|react-cropper|react-dnd|dompurify|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
-            name: 'cms_commons',
-            chunks: 'all',
-            reuseExistingChunk: true,
-            priority: -10,
-          },
+          // cms_commons: {
+          //   test: /\/node_modules[^]*\/(react-player|react-slick|cropper|react-cropper|react-dnd|dompurify|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
+          //   name: 'cms_commons',
+          //   chunks: 'all',
+          //   reuseExistingChunk: true,
+          //   priority: -10,
+          // },
           // vaam: {
           //   test: /\/src\/(vaam)\//,
           //   name: 'vaam',
