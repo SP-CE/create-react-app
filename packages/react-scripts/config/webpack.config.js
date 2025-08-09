@@ -261,6 +261,7 @@ module.exports = function (webpackEnv) {
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
+          parallel: true,
           terserOptions: {
             parse: {
               // We want terser to parse ecma 8 code. However, we don't want it
@@ -305,6 +306,8 @@ module.exports = function (webpackEnv) {
       mergeDuplicateChunks: true,
       splitChunks: {
         chunks: 'all', // Splits code into smaller chunks
+        maxInitialRequests: 10,
+        maxAsyncRequests: 10,
         maxSize: 50000000, // Max size of a split chunk
         usedExports: true, // Tree shaking
         cacheGroups: {
