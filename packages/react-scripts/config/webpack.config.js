@@ -206,7 +206,7 @@ module.exports = function (webpackEnv) {
     bail: isEnvProduction,
     devtool: isEnvProduction
       ? shouldUseSourceMap
-        ? 'source-map'
+        ? 'hidden-source-map'
         : false
       : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
@@ -220,13 +220,13 @@ module.exports = function (webpackEnv) {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
-        ? 'static/js/[file].[hash:8].js'
+        ? 'static/js/[name].[contenthash:8].js'
         : isEnvDevelopment && 'static/js/bundle.js',
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
-        ? 'static/js/[file].[hash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[file].chunk.js',
-      assetModuleFilename: 'static/media/[file].[hash][ext]',
+        ? 'static/js/[name].[contenthash:8].chunk.js'
+        : isEnvDevelopment && 'static/js/[name].chunk.js',
+      assetModuleFilename: 'static/media/[name].[contenthash][ext]',
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
@@ -258,6 +258,8 @@ module.exports = function (webpackEnv) {
     },
     optimization: {
       minimize: isEnvProduction,
+      moduleIds: 'deterministic',
+      chunkIds: 'deterministic',
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
@@ -452,7 +454,7 @@ module.exports = function (webpackEnv) {
                 {
                   loader: require.resolve('file-loader'),
                   options: {
-                    name: 'static/media/[file].[hash].[ext]',
+                    name: 'static/media/[name].[contenthash].[ext]',
                   },
                 },
               ],
@@ -715,8 +717,8 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'static/css/[file].[hash:8].css',
-          chunkFilename: 'static/css/[file].[hash:8].chunk.css',
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
           // ignoreOrder: true,
         }),
       isEnvProduction &&
