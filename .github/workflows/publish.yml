@@ -1,4 +1,5 @@
 name: Publish
+
 on:
   push:
     branches:
@@ -8,37 +9,44 @@ on:
       - '.github/workflows/publish.yml'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure .npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGE_TOKEN }}" > ~/.npmrc
-
-      - name: Cache node modules
-        uses: actions/cache@v4
-        id: npm-cache
-        with:
-          path: packages/react-scripts/node_modules
-          key: spce-react-scripts-${{ hashFiles('**/package-lock.json') }}
-
       - name: Install dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: |
-          cd packages/react-scripts
-          npm install
+        run: npm install --prefix packages/react-scripts --legacy-peer-deps
 
-      - name: Publish to NPM Package Registry
+      - name: Bump patch version
+        id: version
         run: |
           cd packages/react-scripts
-          npm publish
+          NEW_VERSION=$(npm version patch --no-git-tag-version)
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and tag version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/react-scripts/package.json
+          git commit -m "chore: bump spce-react-scripts to ${{ steps.version.outputs.new_version }} [skip ci]"
+          git tag ${{ steps.version.outputs.new_version }}
+          git push origin main --follow-tags
+
+      - name: Publish to npm
+        run: npm publish --prefix packages/react-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_TOKEN }}
