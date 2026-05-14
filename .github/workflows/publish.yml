@@ -28,7 +28,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: npm install --prefix packages/react-scripts --legacy-peer-deps
+        run: cd packages/react-scripts && npm install --legacy-peer-deps
 
       - name: Bump patch version
         id: version
@@ -48,6 +48,6 @@ jobs:
           git push origin main --follow-tags
 
       - name: Publish to npm
-        run: npm publish --prefix packages/react-scripts
+        run: cd packages/react-scripts && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_TOKEN }}

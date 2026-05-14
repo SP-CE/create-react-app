@@ -240,21 +240,22 @@ module.exports = function (webpackEnv) {
         : isEnvDevelopment &&
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
-    cache: process.env.DISABLE_WEBPACK_CACHE === 'true'
-      ? false
-      : {
-          type: 'filesystem',
-          version: createEnvironmentHash(env.raw),
-          cacheDirectory: paths.appWebpackCache,
-          store: 'pack',
-          buildDependencies: {
-            defaultWebpack: ['webpack/lib/'],
-            config: [__filename],
-            tsconfig: [paths.appTsConfig, paths.appJsConfig].filter(f =>
-              fs.existsSync(f)
-            ),
+    cache:
+      process.env.DISABLE_WEBPACK_CACHE === 'true'
+        ? false
+        : {
+            type: 'filesystem',
+            version: createEnvironmentHash(env.raw),
+            cacheDirectory: paths.appWebpackCache,
+            store: 'pack',
+            buildDependencies: {
+              defaultWebpack: ['webpack/lib/'],
+              config: [__filename],
+              tsconfig: [paths.appTsConfig, paths.appJsConfig].filter(f =>
+                fs.existsSync(f)
+              ),
+            },
           },
-        },
     infrastructureLogging: {
       level: process.env.DISABLE_WEBPACK_CACHE === 'true' ? 'info' : 'none',
     },
