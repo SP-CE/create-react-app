@@ -310,51 +310,48 @@ module.exports = function (webpackEnv) {
         new CssMinimizerPlugin(),
       ],
       mergeDuplicateChunks: true,
-      splitChunks: {
-        chunks: 'all', // Splits code into smaller chunks
-        maxInitialRequests: 10,
-        maxAsyncRequests: 10,
-        maxSize: 50000000, // Max size of a split chunk
-        usedExports: true, // Tree shaking
-        cacheGroups: {
-          mui_libs: {
-            test: /\/node_modules\/@mui\/(base|material|system|icons-material|x-tree-view|x-internals|utils)/,
-            name: 'mui_libs',
-            chunks: 'all',
-            reuseExistingChunk: true,
-          },
-          vaam_libs: {
-            test: /\/node_modules\/(vaam|@vaam|video)/,
-            name: 'vaam_libs',
-            chunks: 'all',
-            reuseExistingChunk: true,
-          },
-          shared_libs: {
-            test: /\/node_modules\/(react|react-dom|i18next|webfontloader|device-uuid|lodash|dompurify)\//,
-            name: 'shared_libs',
-            chunks: 'all',
-            reuseExistingChunk: true,
-          },
-          cms_libs: {
-            test: /\/node_modules[^]*\/(react-slick|cropper|react-cropper|react-dnd|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
-            name: 'cms_libs',
-            chunks: 'all',
-            reuseExistingChunk: true,
-            priority: -10,
-          },
-          // vaam: {
-          //   test: /\/src\/(vaam)\//,
-          //   name: 'vaam',
-          //   chunks: 'all',
-          //   reuseExistingChunk: true,
-          //   priority: -10,
-          // },
-          default: {
-            minChunks: 100,
-            reuseExistingChunk: true,
+      // splitChunks only runs in production — dev uses non-templated 'bundle.js'
+      // filename which conflicts if multiple initial chunks are created
+      ...(isEnvProduction && {
+        splitChunks: {
+          chunks: 'all',
+          maxInitialRequests: 10,
+          maxAsyncRequests: 10,
+          maxSize: 50000000,
+          usedExports: true,
+          cacheGroups: {
+            mui_libs: {
+              test: /\/node_modules\/@mui\/(base|material|system|icons-material|x-tree-view|x-internals|utils)/,
+              name: 'mui_libs',
+              chunks: 'all',
+              reuseExistingChunk: true,
+            },
+            vaam_libs: {
+              test: /\/node_modules\/(vaam|@vaam|video)/,
+              name: 'vaam_libs',
+              chunks: 'all',
+              reuseExistingChunk: true,
+            },
+            shared_libs: {
+              test: /\/node_modules\/(react|react-dom|i18next|webfontloader|device-uuid|lodash|dompurify)\//,
+              name: 'shared_libs',
+              chunks: 'all',
+              reuseExistingChunk: true,
+            },
+            cms_libs: {
+              test: /\/node_modules[^]*\/(react-slick|cropper|react-cropper|react-dnd|lodash|enquire|classnames|json2mq|linkify|resize-observer-polyfill)/,
+              name: 'cms_libs',
+              chunks: 'all',
+              reuseExistingChunk: true,
+              priority: -10,
+            },
+            default: {
+              minChunks: 100,
+              reuseExistingChunk: true,
+            },
           },
         },
-      },
+      }),
       usedExports: true, // Enable tree shaking by marking used exports
     },
     resolve: {
