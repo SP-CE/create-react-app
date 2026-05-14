@@ -190,7 +190,12 @@ module.exports = function (webpackEnv) {
           loader: require.resolve(preProcessor),
           options: {
             sourceMap: true,
-            ...(preProcessor === 'sass-loader' && { api: 'modern' }),
+            ...(preProcessor === 'sass-loader' && {
+              api: 'modern',
+              sassOptions: {
+                silenceDeprecations: ['import', 'mixed-decls'],
+              },
+            }),
           },
         }
       );
