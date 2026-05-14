@@ -52,11 +52,6 @@ packages:
     # if package is not available locally, proxy requests to 'npmjs' registry
     proxy: npmjs
 
-# log settings
-logs:
-  - { type: stdout, format: pretty, level: warn }
-  #- {type: file, path: verdaccio.log, level: info}
-
 # See https://github.com/verdaccio/verdaccio/issues/301
 server:
   keepAliveTimeout: 0
